@@ -2,14 +2,14 @@ import { closeDatabase, db } from '@/infrastructure/db/client'
 import { settings } from '@/infrastructure/db/schema'
 
 const defaultSettings: typeof settings.$inferInsert = {
-  birthdayPromoText: '¡Feliz cumpleaños! Disfruta una promoción especial.',
+  birthdayPromoText: '¡Feliz cumple! Tienes una promo especial esta semana.',
   id: 1,
   rewardText: 'Brownie de regalo',
   stampsRequired: 10,
   storeLatitude: 20.116710019053915,
   storeLongitude: -98.74697712947373,
   storeName: 'Central Brownies',
-  storeRelevantText: 'Estás cerca de Central Brownies',
+  storeRelevantText: 'Estás a unos pasos de Central Brownies. ¿Se te antoja?',
 }
 
 try {

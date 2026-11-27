@@ -40,7 +40,9 @@ export type ClaimCardInput = {
 
 export type ClaimContext = {
   cardId: string
+  goal: number
   privacyRequired: boolean
+  stamps: number
 }
 
 export type IssueCardInput = {
@@ -309,9 +311,18 @@ export class LoyaltyService {
       const card = await requireMutableCard(repositories, claimToken.cardId)
       const privacyAcceptedAt =
         await repositories.customers.getPrivacyAcceptedAt(card.customerId)
+      const settings = await repositories.settings.get()
+      if (!settings) {
+        throw new LoyaltyError(
+          'SETTINGS_NOT_FOUND',
+          'Loyalty settings are missing'
+        )
+      }
       return {
         cardId: claimToken.cardId,
+        goal: settings.stampsRequired,
         privacyRequired: privacyAcceptedAt === null,
+        stamps: card.stampCount,
       }
     })
   }

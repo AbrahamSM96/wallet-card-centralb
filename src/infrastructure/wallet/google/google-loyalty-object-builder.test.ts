@@ -29,11 +29,13 @@ describe('GoogleLoyaltyObjectBuilder', () => {
       classId: 'issuer.loyalty',
       issuerId: 'issuer',
       logoUrl: 'https://cdn.example.com/logo.png',
+      stripBaseUrl: 'https://example.com',
     })
     const loyaltyClass = builder.buildClass()
     const loyaltyObject = builder.buildObject()
 
     expect(loyaltyClass).toMatchObject({
+      hexBackgroundColor: '#141110',
       id: 'issuer.loyalty',
       merchantLocations: [
         {
@@ -42,21 +44,34 @@ describe('GoogleLoyaltyObjectBuilder', () => {
         },
       ],
       multipleDevicesAndHoldersAllowedStatus: 'ONE_USER_ALL_DEVICES',
+      programLogo: {
+        sourceUri: { uri: 'https://cdn.example.com/logo.png' },
+      },
+      programName: 'Central Brownies',
     })
     expect(loyaltyObject).toMatchObject({
       accountId: 'CB-2345',
       classId: 'issuer.loyalty',
+      heroImage: {
+        sourceUri: {
+          uri: 'https://example.com/api/wallet/strip?stamps=4&goal=10',
+        },
+      },
       id: 'issuer.card-id',
       linksModuleData: {
         uris: [{ uri: card.referralUrl }],
       },
-      loyaltyPoints: { balance: { int: 4 }, label: 'Sellos' },
+      loyaltyPoints: { balance: { string: '4 de 10' }, label: 'Sellos' },
       merchantLocations: [
         {
           latitude: card.storeLatitude,
           longitude: card.storeLongitude,
         },
       ],
+      secondaryLoyaltyPoints: {
+        balance: { string: '6' },
+        label: 'Te faltan',
+      },
       state: 'ACTIVE',
     })
     expect(loyaltyObject).not.toHaveProperty('locations')
@@ -68,8 +83,24 @@ describe('GoogleLoyaltyObjectBuilder', () => {
       classId: 'issuer.loyalty',
       issuerId: 'issuer',
       logoUrl: 'https://cdn.example.com/logo.png',
+      stripBaseUrl: 'https://example.com',
     })
 
     expect(builder.buildObject().state).toBe('INACTIVE')
+  })
+
+  it('switches secondary points to the ready reward state', () => {
+    const builder = new GoogleLoyaltyObjectBuilder({
+      card: { ...card, stampCount: 10 },
+      classId: 'issuer.loyalty',
+      issuerId: 'issuer',
+      logoUrl: 'https://cdn.example.com/logo.png',
+      stripBaseUrl: 'https://example.com',
+    })
+
+    expect(builder.buildObject().secondaryLoyaltyPoints).toEqual({
+      balance: { string: 'Listo' },
+      label: 'Premio',
+    })
   })
 })

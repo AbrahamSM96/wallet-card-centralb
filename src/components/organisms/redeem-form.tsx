@@ -37,7 +37,7 @@ export function RedeemForm({
     <form action={formAction} className="space-y-3">
       <Input name="cardId" type="hidden" value={cardId} />
       <Input name="customerId" type="hidden" value={customerId} />
-      <p className="text-sm text-stone-600">
+      <p className="text-sm text-cacao">
         Consume {goal} sellos y conserva {remainder} de remanente.
       </p>
       {state.error ? <Alert tone="error">{state.error}</Alert> : null}

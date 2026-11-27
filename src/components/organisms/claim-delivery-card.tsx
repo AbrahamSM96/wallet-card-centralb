@@ -17,7 +17,7 @@ export function ClaimDeliveryCard({
   delivery,
 }: ClaimDeliveryCardProps): React.JSX.Element {
   return (
-    <section className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+    <section className="rounded-[24px] border border-emerald-200 bg-emerald-50 p-5">
       <h2 className="text-lg font-semibold text-emerald-950">
         Link listo para entregar
       </h2>
@@ -34,7 +34,7 @@ export function ClaimDeliveryCard({
           width={160}
         />
         <div className="min-w-0 space-y-3">
-          <p className="rounded-lg bg-white p-3 text-xs break-all text-stone-700">
+          <p className="rounded-lg bg-white p-3 text-xs break-all text-chocolate">
             {delivery.claimUrl}
           </p>
           <div className="flex flex-col gap-2 sm:flex-row">

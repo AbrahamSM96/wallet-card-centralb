@@ -3,6 +3,7 @@
 import { env } from '@/config/env'
 import { requireAdmin } from '@/infrastructure/auth/require-admin'
 import {
+  getAdminSettings,
   getCustomerPhone,
   getCustomerPhoneByCardId,
   updateAdminSettings,
@@ -141,9 +142,12 @@ export async function addStampAction(
       orderNumber: parsed.data.orderNumber,
       source: 'order',
     })
+    const settings = await getAdminSettings()
     revalidateCustomerPaths(parsed.data.customerId)
     return {
-      success: `Sello agregado. La tarjeta tiene ${stampCountLabel(result.stampCount)}.`,
+      success: settings
+        ? `¡Un brownie más! Llevas ${result.stampCount} de ${settings.stampsRequired}.`
+        : `¡Un brownie más! Llevas ${stampCountLabel(result.stampCount)}.`,
     }
   } catch (error) {
     return { error: toSpanishActionError(error) }

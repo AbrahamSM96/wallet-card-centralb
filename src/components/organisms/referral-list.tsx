@@ -15,20 +15,20 @@ export function ReferralList({
   referrals,
 }: ReferralListProps): React.JSX.Element {
   if (referrals.length === 0) {
-    return <p className="text-stone-600">Aún no hay referidos.</p>
+    return <p className="text-cacao">Aún no hay referidos.</p>
   }
 
   return (
     <div className="grid gap-3">
       {referrals.map((referral) => (
         <article
-          className="rounded-xl border border-stone-200 bg-white p-4"
+          className="rounded-[20px] border border-cacao/20 bg-white p-4"
           key={referral.id}
         >
           <div className="flex items-start justify-between gap-3">
             <div>
               <h2 className="font-semibold">{referral.referredName}</h2>
-              <p className="text-sm text-stone-600">
+              <p className="text-sm text-cacao">
                 Invitado por {referral.referrerPublicCode}
               </p>
             </div>

@@ -252,7 +252,7 @@ Claude revisa y te manda comentarios; puedes debatirlos con argumentos.
 
 ## 7. Checklist antes de publicar Google Wallet
 
-- [ ] Sustituir `public/google-wallet-logo.png` por el logo PNG final de Central
+- [ ] Regenerar `public/brand/google-logo.png` desde el logo PNG final de Central
       Brownies siguiendo las brand guidelines de Google Wallet.
 - [ ] Verificar que la `LoyaltyClass` esté en `UNDER_REVIEW` y haya sido aprobada
       en Google Pay & Wallet Console.

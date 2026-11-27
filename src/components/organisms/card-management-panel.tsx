@@ -43,10 +43,10 @@ export function CardManagementPanel({
   const [resyncState, resyncAction] = useActionState(resyncWalletAction, {})
 
   return (
-    <section className="space-y-4 rounded-2xl border border-stone-200 bg-white p-5">
+    <section className="space-y-4 rounded-[24px] border border-cacao/20 bg-white p-5">
       <div>
         <h2 className="font-semibold">Administrar tarjeta</h2>
-        <p className="mt-1 text-sm text-stone-600">
+        <p className="mt-1 text-sm text-cacao">
           Revisa alertas, anula una tarjeta o emite una reposición.
         </p>
       </div>

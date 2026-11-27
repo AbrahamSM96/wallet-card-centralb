@@ -22,4 +22,12 @@ describe('resolveGoogleWalletLogoUrl', () => {
       'HTTPS public logo URL'
     )
   })
+
+  it('uses the branded logo path for an HTTPS app URL', async () => {
+    const { resolveGoogleWalletLogoUrl } =
+      await import('./google-wallet-config')
+    expect(resolveGoogleWalletLogoUrl('https://central.example')).toBe(
+      'https://central.example/brand/google-logo.png'
+    )
+  })
 })

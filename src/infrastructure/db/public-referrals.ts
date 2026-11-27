@@ -1,5 +1,5 @@
 import { db } from '@/infrastructure/db/client'
-import { cards } from '@/infrastructure/db/schema'
+import { cards, settings } from '@/infrastructure/db/schema'
 import { and, eq, ne } from 'drizzle-orm'
 
 /**
@@ -21,4 +21,14 @@ export async function hasActiveReferralCard(
     )
     .limit(1)
   return rows.length > 0
+}
+
+/** Returns the public stamp goal used by referral previews. */
+export async function getPublicStampsGoal(): Promise<number> {
+  const rows = await db
+    .select({ value: settings.stampsRequired })
+    .from(settings)
+    .where(eq(settings.id, 1))
+    .limit(1)
+  return rows[0]?.value ?? 10
 }

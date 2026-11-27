@@ -29,7 +29,7 @@ export function CheckboxField({
       <div>
         <Label htmlFor={id}>{label}</Label>
         {description ? (
-          <p className="mt-1 text-xs text-stone-600">{description}</p>
+          <p className="mt-1 text-xs text-cacao">{description}</p>
         ) : null}
       </div>
     </div>

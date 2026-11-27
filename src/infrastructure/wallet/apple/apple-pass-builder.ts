@@ -1,3 +1,4 @@
+import { siteConfig } from '@/config/site'
 import type { WalletCard } from '@/domain/loyalty/wallet-provider'
 
 type ApplePassField = {
@@ -31,7 +32,7 @@ export type ApplePassJson = {
   sharingProhibited: true
   storeCard: {
     backFields: ApplePassField[]
-    primaryFields: ApplePassField[]
+    headerFields: ApplePassField[]
     secondaryFields: ApplePassField[]
   }
   teamIdentifier: string
@@ -80,26 +81,39 @@ export class ApplePassBuilder {
       throw new Error('Apple authentication token is missing for the card')
     }
 
+    const rewardField: ApplePassField =
+      this.#card.stampCount >= this.#card.stampsRequired
+        ? {
+            changeMessage: '%@: tu brownie de regalo te espera.',
+            key: 'reward',
+            label: 'PREMIO',
+            value: 'Listo para canjear',
+          }
+        : {
+            key: 'reward',
+            label: 'PREMIO',
+            value: this.#card.rewardText,
+          }
     const secondaryFields: ApplePassField[] = [
       {
-        changeMessage: 'Nueva promoción: %@',
-        key: 'promotion',
-        label: 'PREMIO',
-        value: this.#card.rewardText,
+        key: 'customer',
+        label: 'CLIENTE',
+        value: this.#card.accountName,
       },
+      rewardField,
     ]
     if (this.#card.birthdayPromoActive) {
-      secondaryFields.push({
-        changeMessage: 'Promoción de cumpleaños: %@',
+      secondaryFields[1] = {
+        changeMessage: '¡Feliz cumple! %@ esta semana.',
         key: 'birthday_promotion',
         label: 'CUMPLEAÑOS',
-        value: this.#card.birthdayPromoText,
-      })
+        value: 'Promo especial',
+      }
     }
 
     return {
       authenticationToken: this.#card.appleAuthToken,
-      backgroundColor: 'rgb(124, 63, 44)',
+      backgroundColor: 'rgb(20, 17, 16)',
       barcodes: [
         {
           format: 'PKBarcodeFormatQR',
@@ -107,10 +121,10 @@ export class ApplePassBuilder {
           messageEncoding: 'iso-8859-1',
         },
       ],
-      description: `Tarjeta de lealtad de ${this.#card.storeName}`,
+      description: `Tarjeta de lealtad de ${siteConfig.name}`,
       foregroundColor: 'rgb(255, 255, 255)',
       formatVersion: 1,
-      labelColor: 'rgb(255, 235, 220)',
+      labelColor: 'rgb(224, 165, 102)',
       locations: [
         {
           latitude: this.#card.storeLatitude,
@@ -118,8 +132,8 @@ export class ApplePassBuilder {
           relevantText: this.#card.storeRelevantText,
         },
       ],
-      logoText: this.#card.storeName,
-      organizationName: this.#card.storeName,
+      logoText: siteConfig.name,
+      organizationName: siteConfig.name,
       passTypeIdentifier: this.#passTypeIdentifier,
       serialNumber: this.#card.cardId,
       sharingProhibited: true,
@@ -136,9 +150,9 @@ export class ApplePassBuilder {
             value: `${this.#card.accountName} · ${this.#card.publicCode}`,
           },
         ],
-        primaryFields: [
+        headerFields: [
           {
-            changeMessage: 'Tus sellos ahora son %@.',
+            changeMessage: '¡Un brownie más! Llevas %@.',
             key: 'stamps',
             label: 'SELLOS',
             value: `${this.#card.stampCount}/${this.#card.stampsRequired}`,

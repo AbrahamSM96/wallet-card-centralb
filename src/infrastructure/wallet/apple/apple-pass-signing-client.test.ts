@@ -10,7 +10,7 @@ import { ApplePassBuilder } from './apple-pass-builder'
 import { ApplePassSigningClient } from './apple-pass-signing-client'
 
 describe('ApplePassSigningClient', () => {
-  it('signs a pkpass with certificates generated in the test', () => {
+  it('signs a pkpass with certificates generated in the test', async () => {
     const directory = mkdtempSync(join(tmpdir(), 'central-brownies-pass-'))
     try {
       generateCertificates(directory)
@@ -49,9 +49,12 @@ describe('ApplePassSigningClient', () => {
         wwdrCertificate: readFileSync(join(directory, 'wwdr.pem')),
       })
 
-      const signedPass = signer.sign(passJson)
+      const signedPass = await signer.sign(passJson)
       expect(signedPass.subarray(0, 2).toString()).toBe('PK')
       expect(signedPass.length).toBeGreaterThan(500)
+      expect(signedPass.includes(Buffer.from('strip.png'))).toBe(true)
+      expect(signedPass.includes(Buffer.from('strip@2x.png'))).toBe(true)
+      expect(signedPass.includes(Buffer.from('strip@3x.png'))).toBe(true)
     } finally {
       rmSync(directory, { force: true, recursive: true })
     }

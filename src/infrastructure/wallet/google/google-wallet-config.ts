@@ -68,7 +68,7 @@ export function resolveGoogleWalletLogoUrl(
   override?: string
 ): string {
   const logoUrl =
-    override ?? `${appUrl.replace(/\/$/, '')}/google-wallet-logo.png`
+    override ?? `${appUrl.replace(/\/$/, '')}/brand/google-logo.png`
   if (new URL(logoUrl).protocol !== 'https:') {
     throw new GoogleWalletConfigurationError()
   }

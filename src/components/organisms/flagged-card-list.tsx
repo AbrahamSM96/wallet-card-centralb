@@ -17,20 +17,20 @@ export function FlaggedCardList({
   cards,
 }: FlaggedCardListProps): React.JSX.Element {
   if (cards.length === 0) {
-    return <p className="text-stone-600">No hay tarjetas flagged.</p>
+    return <p className="text-cacao">No hay tarjetas flagged.</p>
   }
 
   return (
     <div className="grid gap-3">
       {cards.map((card) => (
         <article
-          className="rounded-xl border border-red-200 bg-white p-4"
+          className="rounded-[20px] border border-red-200 bg-white p-4"
           key={card.publicCode}
         >
           <div className="flex items-start justify-between gap-3">
             <div>
               <h2 className="font-semibold">{card.customerName}</h2>
-              <p className="text-sm text-stone-600">
+              <p className="text-sm text-cacao">
                 {formatMexicanPhone(card.phone)}
               </p>
             </div>

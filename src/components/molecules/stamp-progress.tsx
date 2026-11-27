@@ -26,10 +26,10 @@ export function StampProgress({
           <span className="text-emerald-700">+{count - goal} remanentes</span>
         ) : null}
       </div>
-      <div className="h-3 overflow-hidden rounded-full bg-stone-200">
+      <div className="h-3 overflow-hidden rounded-full bg-borde-pendiente/30">
         <div
           aria-label={`${percentage}% de la meta`}
-          className="h-full rounded-full bg-amber-800"
+          className="h-full rounded-full bg-noche"
           style={{ width: `${percentage}%` }}
         />
       </div>

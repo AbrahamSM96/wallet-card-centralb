@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
+import { renderStampStripPng } from '@/infrastructure/wallet/stamp-strip-image'
 import { PKPass } from 'passkit-generator'
 
 import type { ApplePassJson } from './apple-pass-builder'
@@ -19,8 +20,10 @@ export class ApplePassSigningClient {
   readonly #assets: {
     icon: Buffer
     icon2x: Buffer
+    icon3x: Buffer
     logo: Buffer
     logo2x: Buffer
+    logo3x: Buffer
   }
 
   /**
@@ -46,10 +49,24 @@ export class ApplePassSigningClient {
       wwdr: config.wwdrCertificate,
     }
     this.#assets = {
-      icon: readFileSync(join(process.cwd(), 'public', 'apple-icon.png')),
-      icon2x: readFileSync(join(process.cwd(), 'public', 'apple-icon@2x.png')),
-      logo: readFileSync(join(process.cwd(), 'public', 'apple-logo.png')),
-      logo2x: readFileSync(join(process.cwd(), 'public', 'apple-logo@2x.png')),
+      icon: readFileSync(
+        join(process.cwd(), 'public', 'brand', 'apple-icon.png')
+      ),
+      icon2x: readFileSync(
+        join(process.cwd(), 'public', 'brand', 'apple-icon@2x.png')
+      ),
+      icon3x: readFileSync(
+        join(process.cwd(), 'public', 'brand', 'apple-icon@3x.png')
+      ),
+      logo: readFileSync(
+        join(process.cwd(), 'public', 'brand', 'apple-logo.png')
+      ),
+      logo2x: readFileSync(
+        join(process.cwd(), 'public', 'brand', 'apple-logo@2x.png')
+      ),
+      logo3x: readFileSync(
+        join(process.cwd(), 'public', 'brand', 'apple-logo@3x.png')
+      ),
     }
   }
 
@@ -58,14 +75,32 @@ export class ApplePassSigningClient {
    *
    * @param passJson - Validated pass metadata from the builder.
    */
-  sign(passJson: ApplePassJson): Buffer {
+  async sign(passJson: ApplePassJson): Promise<Buffer> {
+    const stampsField = passJson.storeCard.headerFields.find(
+      (field) => field.key === 'stamps'
+    )
+    const [stampsText, goalText] = String(stampsField?.value ?? '0/10').split(
+      '/'
+    )
+    const stamps = Number(stampsText)
+    const goal = Number(goalText)
+    const [strip, strip2x, strip3x] = await Promise.all([
+      renderStampStripPng(stamps, goal, 375, 123),
+      renderStampStripPng(stamps, goal, 750, 246),
+      renderStampStripPng(stamps, goal, 1125, 369),
+    ])
     const pass = new PKPass(
       {
         'icon.png': this.#assets.icon,
         'icon@2x.png': this.#assets.icon2x,
+        'icon@3x.png': this.#assets.icon3x,
         'logo.png': this.#assets.logo,
         'logo@2x.png': this.#assets.logo2x,
+        'logo@3x.png': this.#assets.logo3x,
         'pass.json': Buffer.from(JSON.stringify(passJson)),
+        'strip.png': strip,
+        'strip@2x.png': strip2x,
+        'strip@3x.png': strip3x,
       },
       this.#certificates
     )

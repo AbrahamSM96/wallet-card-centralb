@@ -15,7 +15,7 @@ export function LoginForm({ error }: LoginFormProps): React.JSX.Element {
   return (
     <form
       action="/api/auth/login"
-      className="space-y-5 rounded-2xl border border-stone-200 bg-white p-8 shadow-sm"
+      className="space-y-5 rounded-[24px] border border-cacao/20 bg-white p-8 shadow-sm"
       method="post"
     >
       <FormField
@@ -40,7 +40,7 @@ export function LoginForm({ error }: LoginFormProps): React.JSX.Element {
         </p>
       ) : null}
       <Button
-        className="w-full rounded-lg bg-amber-900 px-4 py-2.5 font-medium text-white hover:bg-amber-800"
+        className="w-full rounded-lg bg-noche px-4 py-2.5 font-medium text-white hover:bg-chocolate"
         type="submit"
       >
         Entrar

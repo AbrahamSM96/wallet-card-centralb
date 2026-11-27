@@ -16,7 +16,7 @@ type NavLinkProps = {
 export function NavLink({ children, href }: NavLinkProps): React.JSX.Element {
   return (
     <Link
-      className="shrink-0 rounded-lg px-3 py-2 text-sm font-medium text-stone-700 hover:bg-stone-100 hover:text-stone-950"
+      className="shrink-0 rounded-lg px-3 py-2 text-sm font-medium text-chocolate hover:bg-crema hover:text-chocolate"
       href={href}
     >
       {children}

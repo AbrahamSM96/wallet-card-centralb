@@ -33,11 +33,11 @@ export function CustomerDetailTemplate({
       <CustomerCardSummary customer={customer} goal={goal} />
       {card ? (
         <div className="grid gap-5 lg:grid-cols-2">
-          <section className="rounded-2xl border border-stone-200 bg-white p-5">
+          <section className="rounded-[24px] border border-cacao/20 bg-white p-5">
             <h2 className="mb-4 font-semibold">Agregar sello</h2>
             <StampForm cardId={card.id} customerId={customer.id} />
           </section>
-          <section className="rounded-2xl border border-stone-200 bg-white p-5">
+          <section className="rounded-[24px] border border-cacao/20 bg-white p-5">
             <h2 className="mb-4 font-semibold">Canjear premio</h2>
             <RedeemForm
               cardId={card.id}
@@ -47,7 +47,7 @@ export function CustomerDetailTemplate({
               remainder={Math.max(0, card.stampCount - goal)}
             />
           </section>
-          <section className="rounded-2xl border border-stone-200 bg-white p-5 lg:col-span-2">
+          <section className="rounded-[24px] border border-cacao/20 bg-white p-5 lg:col-span-2">
             <h2 className="mb-4 font-semibold">Link de reclamo</h2>
             <ReissueClaimForm cardId={card.id} customerId={customer.id} />
           </section>

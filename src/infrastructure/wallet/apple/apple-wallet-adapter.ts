@@ -45,7 +45,7 @@ export class AppleWalletAdapter implements WalletProvider {
    *
    * @param card - Trusted card presentation data.
    */
-  issue(card: WalletCard): Promise<WalletIssueResult> {
+  async issue(card: WalletCard): Promise<WalletIssueResult> {
     try {
       const config = this.#configuration()
       const passJson = new ApplePassBuilder({
@@ -54,14 +54,12 @@ export class AppleWalletAdapter implements WalletProvider {
         passTypeIdentifier: config.passTypeIdentifier,
         teamIdentifier: config.teamIdentifier,
       }).build()
-      const passData = this.#signer().sign(passJson)
-      return Promise.resolve({ passData })
+      const passData = await this.#signer().sign(passJson)
+      return { passData }
     } catch (error) {
-      return Promise.reject(
-        error instanceof Error
-          ? error
-          : new Error('Apple pass generation failed')
-      )
+      throw error instanceof Error
+        ? error
+        : new Error('Apple pass generation failed')
     }
   }
 

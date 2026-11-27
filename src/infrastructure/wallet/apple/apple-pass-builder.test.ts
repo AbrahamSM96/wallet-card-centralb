@@ -33,27 +33,39 @@ describe('ApplePassBuilder', () => {
 
     expect(pass).toMatchObject({
       authenticationToken: 'apple-auth-token',
+      backgroundColor: 'rgb(20, 17, 16)',
+      foregroundColor: 'rgb(255, 255, 255)',
+      labelColor: 'rgb(224, 165, 102)',
       locations: [
         {
           latitude: card.storeLatitude,
           longitude: card.storeLongitude,
         },
       ],
+      logoText: 'Central Brownies',
       passTypeIdentifier: 'pass.com.example.central',
       serialNumber: 'card-id',
       storeCard: {
-        primaryFields: [
+        headerFields: [
           expect.objectContaining({
-            changeMessage: 'Tus sellos ahora son %@.',
+            changeMessage: '¡Un brownie más! Llevas %@.',
             value: '4/10',
           }),
         ],
         secondaryFields: [
-          expect.objectContaining({ changeMessage: 'Nueva promoción: %@' }),
+          expect.objectContaining({
+            label: 'CLIENTE',
+            value: 'Cliente Prueba',
+          }),
+          expect.objectContaining({
+            label: 'PREMIO',
+            value: 'Brownie de regalo',
+          }),
         ],
       },
       webServiceURL: 'https://example.com/api/apple',
     })
+    expect(pass.storeCard).not.toHaveProperty('primaryFields')
     expect(pass).not.toHaveProperty('relevantDate')
     expect(pass).not.toHaveProperty('relevantDates')
   })
@@ -66,5 +78,35 @@ describe('ApplePassBuilder', () => {
       teamIdentifier: 'TEAM123456',
     }).build()
     expect(pass.voided).toBe(true)
+  })
+
+  it('switches the reward field when the goal is complete', () => {
+    const pass = new ApplePassBuilder({
+      appUrl: 'https://example.com',
+      card: { ...card, stampCount: 10 },
+      passTypeIdentifier: 'pass.com.example.central',
+      teamIdentifier: 'TEAM123456',
+    }).build()
+    expect(pass.storeCard.secondaryFields[1]).toEqual({
+      changeMessage: '%@: tu brownie de regalo te espera.',
+      key: 'reward',
+      label: 'PREMIO',
+      value: 'Listo para canjear',
+    })
+  })
+
+  it('replaces the reward field during the birthday window', () => {
+    const pass = new ApplePassBuilder({
+      appUrl: 'https://example.com',
+      card: { ...card, birthdayPromoActive: true },
+      passTypeIdentifier: 'pass.com.example.central',
+      teamIdentifier: 'TEAM123456',
+    }).build()
+    expect(pass.storeCard.secondaryFields[1]).toEqual({
+      changeMessage: '¡Feliz cumple! %@ esta semana.',
+      key: 'birthday_promotion',
+      label: 'CUMPLEAÑOS',
+      value: 'Promo especial',
+    })
   })
 })

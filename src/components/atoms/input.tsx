@@ -13,7 +13,7 @@ export type InputProps = ComponentProps<typeof InputPrimitive>
 export function Input({ className, ...props }: InputProps): React.JSX.Element {
   return (
     <InputPrimitive
-      className={cn('focus-visible:ring-amber-800/30', className)}
+      className={cn('focus-visible:ring-caramelo/40', className)}
       {...props}
     />
   )

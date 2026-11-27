@@ -30,8 +30,8 @@ export function ActionLink({
   const styles = cn(
     'inline-flex min-h-10 items-center justify-center rounded-lg px-4 py-2 text-sm font-medium',
     variant === 'primary'
-      ? 'bg-amber-900 text-white hover:bg-amber-800'
-      : 'border border-stone-300 bg-white text-stone-800 hover:bg-stone-100',
+      ? 'bg-noche text-white hover:bg-chocolate'
+      : 'border border-cacao/30 bg-white text-chocolate hover:bg-crema',
     className
   )
 

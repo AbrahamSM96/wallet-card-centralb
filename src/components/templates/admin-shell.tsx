@@ -15,13 +15,13 @@ type AdminShellProps = {
  */
 export function AdminShell({ children }: AdminShellProps): React.JSX.Element {
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900">
-      <header className="border-b border-stone-200 bg-white">
+    <div className="min-h-screen bg-crema text-chocolate">
+      <header className="border-b border-cacao/20 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
           <BrandMark />
           <form action="/api/auth/logout" method="post">
             <Button
-              className="text-stone-600 hover:text-stone-950"
+              className="text-cacao hover:text-chocolate"
               type="submit"
               variant="ghost"
             >

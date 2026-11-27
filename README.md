@@ -21,6 +21,7 @@ read -s ADMIN_PASSWORD
 export ADMIN_PASSWORD
 bun run admin:create admin@example.com
 unset ADMIN_PASSWORD
+bun run brand:assets
 bun run dev
 ```
 
@@ -39,7 +40,11 @@ bun run db:down
 bun run check
 bun run lint
 bun run test
+bun run brand:assets
 ```
+
+`brand:assets` requiere `public/brand/logo-original.png`; genera logos, iconos y
+favicons con Sharp solo durante desarrollo/build de assets.
 
 `db:reset` elimina el volumen local y todos sus datos.
 
@@ -68,7 +73,12 @@ Google con un error de configuración claro.
 
 Google no puede descargar imágenes desde `localhost` ni por HTTP. En desarrollo
 configura `GOOGLE_WALLET_LOGO_URL` con un CDN o un túnel HTTPS público; en Vercel
-puede apuntar a `https://tu-dominio/google-wallet-logo.png`.
+puede apuntar a `https://tu-dominio/brand/google-logo.png`.
+
+`GOOGLE_WALLET_LOGO_URL` es opcional: si no existe, se usa automáticamente
+`<APP_URL>/brand/google-logo.png`, que ya es HTTPS en Vercel. Si quedó definida
+de pruebas anteriores, actualízala al asset nuevo o elimínala para usar el
+fallback.
 
 ### Apple Wallet — opcionales
 
@@ -117,8 +127,9 @@ reportar el resultado; el volumen actual es pequeño.
 ### Google Wallet
 
 - [ ] Crear issuer y autorizar la service account.
-- [ ] Sustituir `public/google-wallet-logo.png` por el logo PNG final.
-- [ ] Configurar `GOOGLE_WALLET_LOGO_URL` con una URL HTTPS pública verificable.
+- [ ] Regenerar `public/brand/google-logo.png` desde el logo original final.
+- [ ] Configurar `GOOGLE_WALLET_LOGO_URL` como
+      `https://<dominio>/brand/google-logo.png` o CDN equivalente.
 - [ ] Revisar y aprobar la LoyaltyClass.
 - [ ] Solicitar acceso de publicación; Demo Mode muestra `[TEST ONLY]`.
 - [ ] Probar guardado, updates, links, ubicación y cuota de mensajes.

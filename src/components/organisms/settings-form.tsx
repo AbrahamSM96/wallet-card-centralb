@@ -26,7 +26,7 @@ export function SettingsForm({
   return (
     <form
       action={formAction}
-      className="grid gap-5 rounded-2xl border border-stone-200 bg-white p-5 sm:grid-cols-2 sm:p-7"
+      className="grid gap-5 rounded-[24px] border border-cacao/20 bg-white p-5 sm:grid-cols-2 sm:p-7"
     >
       <FormField
         defaultValue={settings.storeName}

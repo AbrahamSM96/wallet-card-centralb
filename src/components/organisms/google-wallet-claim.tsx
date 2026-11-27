@@ -35,7 +35,7 @@ export function GoogleWalletClaim({
     <div className="mt-6 space-y-4">
       {isIOS ? (
         <form action={`/c/${token}/apple`} method="post">
-          <p className="mb-3 text-sm text-stone-600">
+          <p className="mb-3 text-sm text-cacao">
             Detectamos iPhone o iPad. Apple Wallet es la opción recomendada.
           </p>
           {privacyRequired ? (
@@ -46,7 +46,7 @@ export function GoogleWalletClaim({
       ) : null}
       <form action={formAction} className="space-y-4">
         <Input name="token" type="hidden" value={token} />
-        <p className="text-sm text-stone-600">
+        <p className="text-sm text-cacao">
           {isAndroid
             ? 'Detectamos Android. Google Wallet es la opción recomendada.'
             : 'También puedes guardar la tarjeta en tu cuenta de Google Wallet.'}

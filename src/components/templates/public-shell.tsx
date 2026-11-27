@@ -13,7 +13,7 @@ type PublicShellProps = {
  */
 export function PublicShell({ children }: PublicShellProps): React.JSX.Element {
   return (
-    <main className="grid min-h-screen place-items-center bg-stone-50 px-6 py-12 text-stone-900">
+    <main className="grid min-h-screen place-items-center bg-crema px-6 py-12 text-chocolate">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <BrandMark />

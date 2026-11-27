@@ -3,11 +3,11 @@ import { BrandMark } from '@/components/atoms/brand-mark'
 /** Renders the Central Brownies LFPDPPP privacy notice draft. */
 export function PrivacyNoticeTemplate(): React.JSX.Element {
   return (
-    <main className="bg-stone-50 px-5 py-10 text-stone-900">
-      <article className="mx-auto max-w-3xl rounded-2xl border border-stone-200 bg-white p-6 sm:p-10">
+    <main className="bg-crema px-5 py-10 text-chocolate">
+      <article className="mx-auto max-w-3xl rounded-[24px] border border-cacao/20 bg-white p-6 sm:p-10">
         <BrandMark />
         <h1 className="mt-6 text-3xl font-semibold">Aviso de privacidad</h1>
-        <p className="mt-4 text-sm text-stone-600">
+        <p className="mt-4 text-sm text-cacao">
           Última actualización: 26 de noviembre de 2026.
         </p>
 

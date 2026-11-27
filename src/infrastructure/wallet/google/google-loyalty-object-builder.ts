@@ -1,3 +1,4 @@
+import { siteConfig } from '@/config/site'
 import type { WalletCard } from '@/domain/loyalty/wallet-provider'
 
 export type GoogleLoyaltyClass = {
@@ -32,6 +33,15 @@ export type GoogleLoyaltyObject = {
   }
   classId: string
   id: string
+  heroImage: {
+    contentDescription: {
+      defaultValue: {
+        language: 'es-MX'
+        value: string
+      }
+    }
+    sourceUri: { uri: string }
+  }
   linksModuleData: {
     uris: Array<{
       description: string
@@ -40,13 +50,17 @@ export type GoogleLoyaltyObject = {
     }>
   }
   loyaltyPoints: {
-    balance: { int: number }
+    balance: { string: string }
     label: string
   }
   merchantLocations: Array<{
     latitude: number
     longitude: number
   }>
+  secondaryLoyaltyPoints: {
+    balance: { string: string }
+    label: string
+  }
   state: 'ACTIVE' | 'INACTIVE'
   textModulesData: Array<{
     body: string
@@ -60,6 +74,7 @@ type GoogleLoyaltyObjectBuilderInput = {
   classId: string
   issuerId: string
   logoUrl: string
+  stripBaseUrl: string
 }
 
 /** Builds Google LoyaltyClass and LoyaltyObject resources from domain data. */
@@ -68,6 +83,7 @@ export class GoogleLoyaltyObjectBuilder {
   readonly #classId: string
   readonly #issuerId: string
   readonly #logoUrl: string
+  readonly #stripBaseUrl: string
 
   /**
    * Creates a builder for one wallet card.
@@ -77,38 +93,41 @@ export class GoogleLoyaltyObjectBuilder {
    * @param input.classId - Fully-qualified Google class ID.
    * @param input.issuerId - Google Wallet issuer ID.
    * @param input.logoUrl - Public HTTPS logo URL.
+   * @param input.stripBaseUrl - Public application URL for the stamp strip.
    */
   constructor({
     card,
     classId,
     issuerId,
     logoUrl,
+    stripBaseUrl,
   }: GoogleLoyaltyObjectBuilderInput) {
     this.#card = card
     this.#classId = classId
     this.#issuerId = issuerId
     this.#logoUrl = logoUrl
+    this.#stripBaseUrl = stripBaseUrl.replace(/\/$/, '')
   }
 
   /** Builds the shared loyalty class using supported current fields. */
   buildClass(): GoogleLoyaltyClass {
     return {
       countryCode: 'MX',
-      hexBackgroundColor: '#7c3f2c',
+      hexBackgroundColor: '#141110',
       id: this.#classId,
-      issuerName: this.#card.storeName,
+      issuerName: siteConfig.name,
       merchantLocations: [this.#merchantLocation()],
       multipleDevicesAndHoldersAllowedStatus: 'ONE_USER_ALL_DEVICES',
       programLogo: {
         contentDescription: {
           defaultValue: {
             language: 'es-MX',
-            value: `Logo de ${this.#card.storeName}`,
+            value: `Logo de ${siteConfig.name}`,
           },
         },
         sourceUri: { uri: this.#logoUrl },
       },
-      programName: this.#card.storeName,
+      programName: siteConfig.name,
       reviewStatus: 'UNDER_REVIEW',
     }
   }
@@ -138,6 +157,17 @@ export class GoogleLoyaltyObjectBuilder {
         value: this.#card.publicCode,
       },
       classId: this.#classId,
+      heroImage: {
+        contentDescription: {
+          defaultValue: {
+            language: 'es-MX',
+            value: `Progreso: ${this.#card.stampCount} de ${this.#card.stampsRequired} sellos`,
+          },
+        },
+        sourceUri: {
+          uri: `${this.#stripBaseUrl}/api/wallet/strip?stamps=${this.#card.stampCount}&goal=${this.#card.stampsRequired}`,
+        },
+      },
       id: this.objectId(),
       linksModuleData: {
         uris: [
@@ -149,10 +179,23 @@ export class GoogleLoyaltyObjectBuilder {
         ],
       },
       loyaltyPoints: {
-        balance: { int: this.#card.stampCount },
+        balance: {
+          string: `${this.#card.stampCount} de ${this.#card.stampsRequired}`,
+        },
         label: 'Sellos',
       },
       merchantLocations: [this.#merchantLocation()],
+      secondaryLoyaltyPoints:
+        this.#card.stampCount >= this.#card.stampsRequired
+          ? { balance: { string: 'Listo' }, label: 'Premio' }
+          : {
+              balance: {
+                string: String(
+                  this.#card.stampsRequired - this.#card.stampCount
+                ),
+              },
+              label: 'Te faltan',
+            },
       state: this.#card.status === 'voided' ? 'INACTIVE' : 'ACTIVE',
       textModulesData,
     }

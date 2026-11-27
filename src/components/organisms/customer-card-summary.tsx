@@ -20,15 +20,15 @@ export function CustomerCardSummary({
   goal,
 }: CustomerCardSummaryProps): React.JSX.Element {
   return (
-    <section className="space-y-5 rounded-2xl border border-stone-200 bg-white p-5">
+    <section className="space-y-5 rounded-[24px] border border-cacao/20 bg-white p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold">{customer.name}</h2>
-          <p className="mt-1 text-sm text-stone-600">
+          <p className="mt-1 text-sm text-cacao">
             {formatMexicanPhone(customer.phone)}
           </p>
           {customer.email ? (
-            <p className="text-sm text-stone-600">{customer.email}</p>
+            <p className="text-sm text-cacao">{customer.email}</p>
           ) : null}
         </div>
         {customer.card ? (
@@ -43,14 +43,14 @@ export function CustomerCardSummary({
         <StampProgress count={customer.card.stampCount} goal={goal} />
       ) : null}
       {customer.appleDevices.length > 0 ? (
-        <div className="rounded-lg bg-stone-50 p-3">
+        <div className="rounded-lg bg-crema p-3">
           <p className="text-sm font-medium">
             {customer.appleDevices.length}{' '}
             {customer.appleDevices.length === 1
               ? 'dispositivo Apple'
               : 'dispositivos Apple'}
           </p>
-          <ul className="mt-2 space-y-1 text-xs text-stone-600">
+          <ul className="mt-2 space-y-1 text-xs text-cacao">
             {customer.appleDevices.map((device) => (
               <li key={device.deviceLibraryId}>
                 {device.deviceLibraryId.slice(0, 8)}… · desde{' '}

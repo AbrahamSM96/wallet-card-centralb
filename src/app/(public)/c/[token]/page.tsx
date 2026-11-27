@@ -24,19 +24,20 @@ export default async function ClaimPage({
     .regex(/^[A-Za-z0-9_-]{43}$/)
     .safeParse(token)
   if (!parsed.success) notFound()
-  let privacyRequired: boolean
+  let claimContext: Awaited<ReturnType<typeof loyaltyService.getClaimContext>>
   try {
-    privacyRequired = (await loyaltyService.getClaimContext(token))
-      .privacyRequired
+    claimContext = await loyaltyService.getClaimContext(token)
   } catch {
     return <ClaimUnavailableTemplate />
   }
   const userAgent = (await headers()).get('user-agent') ?? ''
   return (
     <ClaimTemplate
+      goal={claimContext.goal}
       isAndroid={/Android/i.test(userAgent)}
       isIOS={/iPhone|iPad|iPod/i.test(userAgent)}
-      privacyRequired={privacyRequired}
+      privacyRequired={claimContext.privacyRequired}
+      stamps={claimContext.stamps}
       token={token}
     />
   )

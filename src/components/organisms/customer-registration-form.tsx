@@ -15,7 +15,7 @@ export function CustomerRegistrationForm(): React.JSX.Element {
     <div className="space-y-6">
       <form
         action={formAction}
-        className="grid gap-5 rounded-2xl border border-stone-200 bg-white p-5 sm:grid-cols-2 sm:p-7"
+        className="grid gap-5 rounded-[24px] border border-cacao/20 bg-white p-5 sm:grid-cols-2 sm:p-7"
       >
         <FormField id="name" label="Nombre" name="name" required />
         <FormField

@@ -1,6 +1,9 @@
 import { ReferralRegistrationTemplate } from '@/components/templates/referral-registration-template'
 import { ReferralUnavailableTemplate } from '@/components/templates/referral-unavailable-template'
-import { hasActiveReferralCard } from '@/infrastructure/db/public-referrals'
+import {
+  getPublicStampsGoal,
+  hasActiveReferralCard,
+} from '@/infrastructure/db/public-referrals'
 import { z } from 'zod'
 
 type ReferralPageProps = {
@@ -24,5 +27,11 @@ export default async function ReferralPage({
   if (!parsed.success || !(await hasActiveReferralCard(parsed.data))) {
     return <ReferralUnavailableTemplate />
   }
-  return <ReferralRegistrationTemplate referrerPublicCode={parsed.data} />
+  const goal = await getPublicStampsGoal()
+  return (
+    <ReferralRegistrationTemplate
+      goal={goal}
+      referrerPublicCode={parsed.data}
+    />
+  )
 }

@@ -44,7 +44,7 @@ export async function buildClaimDelivery(
   phone: string
 ): Promise<ClaimDelivery> {
   const claimUrl = `${appUrl.replace(/\/$/, '')}/c/${claimToken}`
-  const message = `Tu tarjeta de lealtad de ${siteConfig.name} está lista: ${claimUrl}`
+  const message = `¡Hola! Tu tarjeta de ${siteConfig.name} está lista: ${claimUrl}`
   const qrDataUrl = await QRCode.toDataURL(claimUrl, {
     margin: 1,
     width: 320,

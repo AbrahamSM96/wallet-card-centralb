@@ -179,6 +179,7 @@ export class GoogleWalletAdapter implements WalletProvider {
       classId: this.#classId(),
       issuerId: config.issuerId,
       logoUrl: config.logoUrl,
+      stripBaseUrl: config.appUrl,
     })
   }
 
@@ -217,7 +218,15 @@ export class GoogleWalletAdapter implements WalletProvider {
         body: JSON.stringify(loyaltyClass),
         method: 'POST',
       })
+      return
     }
+    await this.#request(
+      `/loyaltyClass/${encodeURIComponent(loyaltyClass.id)}`,
+      {
+        body: JSON.stringify(loyaltyClass),
+        method: 'PATCH',
+      }
+    )
   }
 
   /**

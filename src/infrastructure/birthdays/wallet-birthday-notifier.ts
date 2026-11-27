@@ -34,7 +34,7 @@ export class WalletBirthdayNotifier implements BirthdayNotifier {
     await this.#walletSync.update(cardId)
     await this.#walletSync.notify(cardId, {
       body: message,
-      header: '¡Feliz cumpleaños!',
+      header: '¡Feliz cumple!',
       id: `birthday-${year}`,
     })
   }

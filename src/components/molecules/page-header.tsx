@@ -26,12 +26,12 @@ export function PageHeader({
     <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
         {eyebrow ? (
-          <p className="text-sm font-semibold text-amber-800">{eyebrow}</p>
+          <p className="text-sm font-semibold text-cacao">{eyebrow}</p>
         ) : null}
         <h1 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">
           {title}
         </h1>
-        <p className="mt-2 max-w-2xl text-sm text-stone-600 sm:text-base">
+        <p className="mt-2 max-w-2xl text-sm text-cacao sm:text-base">
           {description}
         </p>
       </div>
