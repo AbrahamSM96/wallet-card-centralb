@@ -1,0 +1,33 @@
+# Stack local de desarrollo.
+#
+#   docker compose up -d db  -> levanta únicamente Postgres; la app se ejecuta
+#                               en el host con `bun dev` para conservar hot reload.
+#
+# Los datos viven en el volumen `pgdata` y sobreviven reinicios del contenedor.
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: central-brownies-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-central_brownies}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-central_brownies}
+      POSTGRES_DB: ${POSTGRES_DB:-central_brownies}
+    ports:
+      # host:container — 5434 evita conflictos con otros Postgres locales.
+      - '${POSTGRES_PORT:-5434}:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U ${POSTGRES_USER:-central_brownies} -d ${POSTGRES_DB:-central_brownies}',
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

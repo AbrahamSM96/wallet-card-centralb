@@ -1,0 +1,2 @@
+ALTER TABLE "birthday_notifications" ADD COLUMN "last_attempt_at" timestamp with time zone;--> statement-breakpoint
+ALTER TABLE "birthday_notifications" ADD COLUMN "notified_at" timestamp with time zone;

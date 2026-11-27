@@ -1,0 +1,1 @@
+ALTER TABLE "birthday_notifications" ADD COLUMN "cleared_at" timestamp with time zone;
