@@ -31,9 +31,9 @@ export function StampStrip({
     ),
   ]
   const scale = height / 336
-  const gap = 24 * scale
+  const gap = 36 * scale
   const availableWidth = width - 140 * scale - gap * (columns - 1)
-  const stampSize = Math.min(112 * scale, availableWidth / columns)
+  const stampSize = Math.min(88 * scale, availableWidth / columns)
   const cornerPoints = [
     [24, 25, 8],
     [52, 46, 5],
@@ -88,7 +88,7 @@ export function StampStrip({
           alignItems: 'center',
           display: 'flex',
           flexDirection: 'column',
-          gap: 18 * scale,
+          gap: 22 * scale,
           justifyContent: 'center',
           position: 'relative',
         }}
