@@ -123,9 +123,9 @@ La clase se consulta primero y se inserta solo si Google responde 404.
 
 ## Notificaciones y límites
 
-Las actualizaciones ordinarias de sellos usan PATCH con
-`notifyPreference: DO_NOT_NOTIFY`. Los mensajes `TEXT_AND_NOTIFY` se reservan
-para bonus de referido y canje para no agotar la cuota.
+Las actualizaciones ordinarias de sellos usan PATCH sin `notifyPreference`, que
+es la forma documentada de no notificar. Los mensajes `TEXT_AND_NOTIFY` se
+reservan para bonus de referido y canje para no agotar la cuota.
 
 Antes de agregar un mensaje, el adapter lee los mensajes del objeto y cuenta
 los `TEXT_AND_NOTIFY` propios de las últimas 24 horas. Al llegar a tres envía

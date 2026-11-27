@@ -29,7 +29,7 @@ describe('GoogleWalletAdapter', () => {
     process.env.DATABASE_URL = 'postgres://example:example@localhost/example'
     process.env.SESSION_SECRET = 'test-secret-that-is-at-least-32-characters'
     const { GoogleWalletAdapter } = await import('./google-wallet-adapter')
-    const requests: Array<{ method: string; url: string }> = []
+    const requests: Array<{ body?: string; method: string; url: string }> = []
     const fetchImplementation = (
       input: string | URL | Request,
       init?: RequestInit
@@ -41,7 +41,11 @@ describe('GoogleWalletAdapter', () => {
             ? input.href
             : input.url
       const method = init?.method ?? 'GET'
-      requests.push({ method, url })
+      requests.push({
+        body: typeof init?.body === 'string' ? init.body : undefined,
+        method,
+        url,
+      })
       if (url.includes('/loyaltyObject/') && method === 'GET') {
         return Promise.resolve(new Response('{}', { status: 404 }))
       }
@@ -72,8 +76,18 @@ describe('GoogleWalletAdapter', () => {
       saveUrl: 'https://pay.google.com/gp/v/save/signed-jwt',
     })
     expect(requests).toContainEqual({
+      body: expect.any(String),
       method: 'PATCH',
       url: 'https://walletobjects.googleapis.com/walletobjects/v1/loyaltyClass/issuer.loyalty',
     })
+
+    await adapter.update(card)
+    const objectPatch = requests.findLast(
+      (request) =>
+        request.method === 'PATCH' && request.url.includes('/loyaltyObject/')
+    )
+    expect(JSON.parse(objectPatch?.body ?? '{}')).not.toHaveProperty(
+      'notifyPreference'
+    )
   })
 })

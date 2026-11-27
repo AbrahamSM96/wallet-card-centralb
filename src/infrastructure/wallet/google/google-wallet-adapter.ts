@@ -16,10 +16,13 @@ import {
   getGoogleWalletConfig,
   type GoogleWalletConfig,
 } from './google-wallet-config'
+import {
+  googleWalletEnum,
+  selectGoogleMessageType,
+} from './google-wallet-enums'
 
 const API_BASE_URL = 'https://walletobjects.googleapis.com/walletobjects/v1'
 const MAX_MESSAGES = 10
-const MAX_NOTIFICATIONS_PER_DAY = 3
 const ONE_DAY_MS = 24 * 60 * 60 * 1000
 
 type GoogleMessage = {
@@ -112,10 +115,7 @@ export class GoogleWalletAdapter implements WalletProvider {
       )
     }
 
-    const messageType =
-      recentNotifications >= MAX_NOTIFICATIONS_PER_DAY
-        ? 'TEXT'
-        : 'TEXT_AND_NOTIFY'
+    const messageType = selectGoogleMessageType(recentNotifications)
     await this.#request(
       `/loyaltyObject/${encodeURIComponent(builder.objectId())}/addMessage`,
       {
@@ -142,10 +142,7 @@ export class GoogleWalletAdapter implements WalletProvider {
     await this.#request(
       `/loyaltyObject/${encodeURIComponent(loyaltyObject.id)}`,
       {
-        body: JSON.stringify({
-          ...loyaltyObject,
-          notifyPreference: 'DO_NOT_NOTIFY',
-        }),
+        body: JSON.stringify(loyaltyObject),
         method: 'PATCH',
       }
     )
@@ -301,7 +298,9 @@ export class GoogleWalletAdapter implements WalletProvider {
  * @param message - Message returned by the Wallet Objects API.
  */
 function isRecentNotification(message: GoogleMessage): boolean {
-  if (message.messageType !== 'TEXT_AND_NOTIFY' || !message.id) return false
+  if (message.messageType !== googleWalletEnum.notifyMessage || !message.id) {
+    return false
+  }
   const timestamp = Number(message.id.split('-').at(-1))
   return Number.isFinite(timestamp) && Date.now() - timestamp < ONE_DAY_MS
 }

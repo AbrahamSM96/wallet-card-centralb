@@ -1,6 +1,8 @@
 import { siteConfig } from '@/config/site'
 import type { WalletCard } from '@/domain/loyalty/wallet-provider'
 
+import { googleWalletEnum } from './google-wallet-enums'
+
 export type GoogleLoyaltyClass = {
   countryCode: 'MX'
   hexBackgroundColor: string
@@ -117,7 +119,8 @@ export class GoogleLoyaltyObjectBuilder {
       id: this.#classId,
       issuerName: siteConfig.name,
       merchantLocations: [this.#merchantLocation()],
-      multipleDevicesAndHoldersAllowedStatus: 'ONE_USER_ALL_DEVICES',
+      multipleDevicesAndHoldersAllowedStatus:
+        googleWalletEnum.multipleHolderStatus,
       programLogo: {
         contentDescription: {
           defaultValue: {
@@ -128,7 +131,7 @@ export class GoogleLoyaltyObjectBuilder {
         sourceUri: { uri: this.#logoUrl },
       },
       programName: siteConfig.name,
-      reviewStatus: 'UNDER_REVIEW',
+      reviewStatus: googleWalletEnum.reviewStatus,
     }
   }
 
@@ -153,7 +156,7 @@ export class GoogleLoyaltyObjectBuilder {
       accountId: this.#card.publicCode,
       accountName: this.#card.accountName,
       barcode: {
-        type: 'QR_CODE',
+        type: googleWalletEnum.qrCode,
         value: this.#card.publicCode,
       },
       classId: this.#classId,
@@ -196,7 +199,10 @@ export class GoogleLoyaltyObjectBuilder {
               },
               label: 'Te faltan',
             },
-      state: this.#card.status === 'voided' ? 'INACTIVE' : 'ACTIVE',
+      state:
+        this.#card.status === 'voided'
+          ? googleWalletEnum.inactiveState
+          : googleWalletEnum.activeState,
       textModulesData,
     }
   }
